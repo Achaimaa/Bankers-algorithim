@@ -1,0 +1,402 @@
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+
+int n, m;
+	void safe(int **alloc, int** max, int *avail, int** need)
+	{
+		int flag = 0;
+		int indx = 0;
+		int* ans = new int[n];
+		int* f = new int[n]{0};
+		int* work = new int[m];
+		for (int i = 0; i < m; i++)
+		{
+			work[i] = avail[i];
+		}
+
+		int fnd = 0;
+		bool nomore = 1;
+		while(nomore)
+		{
+				int* copy = new int[m];
+				for (int a = 0;a < m;a++)
+				{
+					copy[a] = work[a];
+				}
+		
+			for (int i = 0;i < n;i++)
+			{
+				if (f[i] == 0)
+				{
+					flag = 0;
+
+					for (int j = 0;j < m;j++)
+					{
+						if (need[i][j] > work[j])
+						{
+							flag = 1;
+							break;
+						}
+					}
+					if (flag == 0)
+					{
+						ans[indx++] = i;
+						//indx++;
+						for (int k = 0;k < m;k++)
+						{
+							work[k] += alloc[i][k];
+						}
+						f[i] = 1;
+						fnd+= 1;
+					}
+				}
+			}
+			for (int i = 0;i <= m;i++)
+			{
+				if (i == m)
+				{
+					nomore = 0;
+					break;
+				}
+				if (copy[i] != work[i])
+					break;
+			}
+		}
+		if (fnd < n)
+		{
+			cout << "NO system is not in safe state"<<endl;
+			//return false;
+		}
+		if (fnd ==n)
+		{
+			cout << "Yes, Safe state";
+
+			for (int i = 0;i < n - 1;i++)
+			{
+				if (i == 0)
+					cout << "<" << "P" << ans[0] << ",";
+				else
+					cout << "P" << ans[i] << ",";
+				//cout << ans[i];
+			}
+			cout << "P" << ans[n - 1] << ">" << endl;
+		}
+		//return true;
+	}
+
+	void safe2(int** alloc, int** max, int* avail, int** need, int p)
+	{
+		int flag = 0;
+		int indx = 0;  
+		int* ans = new int[n];
+		int* f = new int[n]{0};
+		int* work = new int[m]; //work array intialization
+		for (int i = 0; i < m; i++)
+		{
+			work[i] = avail[i];
+		}
+		int fnd = 0;
+		bool nomore = 1;
+		while (nomore)
+		{
+			int*copy = new int[m];
+			for (int a = 0;a < m;a++)
+			{
+				copy[a] = work[a];
+			}
+			//bool fnd = 0;
+			for (int i = 0;i < n;i++)
+			{
+				/*cout << "needarray";
+				for (int a = 0;a < m;a++)
+				{
+
+					cout << need[i][a] << " ";
+
+				}*/			
+	            /*			cout << "workarray";
+				for (int b = 0;b < m;b++)
+				{
+					cout << work[b];
+				}
+				cout << endl;*/
+				if (f[i] == 0)
+				{
+					flag = 0;
+
+					for (int j = 0;j < m;j++)
+					{
+						if (need[i][j] > work[j])
+						{
+							flag = 1;
+							break;
+						}
+					}
+					if (flag == 0)
+					{
+						ans[indx++] = i;
+						//indx++;
+						for (int k = 0;k < m;k++)
+						{
+							work[k] += alloc[i][k];
+						}
+						f[i] = 1;
+						fnd +=1;
+					}
+				}
+			}
+			for (int i = 0;i <= m;i++)
+			{
+				if (i == m)
+				{
+					nomore = 0;
+					break;
+				}
+				if (copy[i] != work[i])
+					break;
+				
+			}
+	}
+			if (fnd<n )
+			{
+				cout << "Cann't be granted system is not in safe state"<<endl;
+				//return false;
+			}
+			if (fnd==n)
+			{
+				cout << "Yes request can be granted with safe state,";
+				cout << "Safe state";
+
+				for (int i = 0;i < n - 1;i++)
+				{
+					if (i == 0)
+						cout << "<" << "P" << p << "req" << "P" << ans[0] << ",";
+					else
+						cout << "P" << ans[i] << ",";
+					//cout << ans[i];
+				}
+				cout << "P" << ans[n - 1] << ">" << endl;
+			}
+			//return true;
+	}
+	
+
+	int main()
+	{
+		while (true)
+		{
+			cout << "Enter the number of process:" << endl;
+			cin >> n;
+			cout << "Enter the number of resources:" << endl;
+			cin >> m;
+			int** alloc = new int* [n];
+			for (int i = 0; i < n; i++)
+				alloc[i] = new int[m];
+			cout << " " << "Allocation Matrix" << endl;
+			char q = 'A';
+			for (int i = 0;i < m;i++)
+			{
+				cout << "   " << q;
+				q++;
+			}
+			cout << endl;
+			for (int i = 0; i < n; i++)
+			{
+				cout << "P" << i << " ";
+				for (int j = 0;j < m;j++)
+				{
+					cin >> alloc[i][j];
+				}
+			}
+			int** max = new int* [n];
+			for (int i = 0; i < n; i++)
+				max[i] = new int[m];
+			cout << " " << "Max Matrix" << endl;
+			char v = 'A';
+			for (int i = 0;i < m;i++)
+			{
+				cout << "   " << v;
+				v++;
+			}
+			cout << endl;
+			for (int i = 0; i < n; i++)
+			{
+				cout << "P" << i << " ";
+				for (int j = 0;j < m;j++)
+				{
+
+					cin >> max[i][j];
+				}
+			}
+
+			cout << " " << "Available Matrix" << endl;
+
+			int* avail = new int[m];
+			char h = 'A';
+			for (int i = 0;i < m;i++)
+			{
+				cout << "   " << h;
+				h++;
+			}
+			cout << endl;
+			for (int i = 0;i < m;i++)
+			{
+				cin >> avail[i];
+			}
+
+			int** need = new int* [n];
+			for (int i = 0; i < n; i++)
+				need[i] = new int[m];
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++)
+					need[i][j] = max[i][j] - alloc[i][j];
+			}
+
+			int choose;
+			cout << "If you enquiry if the system is safe write 1" << endl;
+			cout << "If you enquiry if a certain immediate request by one of the processes can be granted write 2" << endl;
+			cin >> choose;
+			if (choose == 1)
+			{
+				char x = 'A';
+				cout << "Need matrix :" << endl;
+				for (int i = 0;i < m;i++)
+				{
+					cout << "   " << x;
+					x++;
+				}
+				cout << endl;
+				for (int i = 0; i < n; i++) {
+					cout << "P" << i;
+					for (int j = 0; j < m; j++)
+					{
+						//cout<<need[i][j]<<" " ;
+
+						cout << "  " << need[i][j];
+					}
+					cout << endl;
+				}
+				safe(alloc, max, avail, need);
+			}
+			int p;
+			int* req = new int[m];
+			if (choose == 2)
+			{
+				char x = 'A';
+				cout << "Need matrix before request :" << endl;
+				for (int i = 0;i < m;i++)
+				{
+					cout << "   " << x;
+					x++;
+				}
+				cout << endl;
+				for (int i = 0; i < n; i++) {
+					cout << "P" << i;
+					for (int j = 0; j < m; j++)
+					{
+						//cout<<need[i][j]<<" " ;
+
+						cout << "  " << need[i][j];
+					}
+					cout << endl;
+				}
+				cout << "Write the index of the  process that requests" << endl;
+				cout << "P";
+				cin >> p;
+				cout << "arrives for";
+				for (int i = 0;i < m;i++)
+				{
+					cin >> req[i];
+				}
+				/*	for (int i = 0;i < m;i++)
+				{
+					cout << need[p][i];
+				}*/
+				/*cout << endl;
+				for (int i = 0;i < m;i++)
+				{
+					cout << req[i];
+				}*/
+
+				int pass = 1;
+				for (int i = 0;i < m;i++)
+				{
+					if (req[i] > need[p][i])
+					{
+						pass = 0;
+						break;
+					}
+				}
+
+				if (pass == 1)
+				{
+					for (int i = 0;i < m;i++)
+					{
+						if (req[i] > avail[i])
+						{
+							pass = 0;
+
+							break;
+						}
+					}
+					if (pass == 1)
+					{
+						for (int i = 0;i < m;i++)
+						{
+							avail[i] -= req[i];
+							alloc[p][i] += req[i];
+							need[p][i] -= req[i];
+						}
+						char x = 'A';
+						cout << "Need matrix after request :" << endl;
+						for (int i = 0;i < m;i++)
+						{
+							cout << "   " << x;
+							x++;
+						}
+						cout << endl;
+						for (int i = 0; i < n; i++) {
+							cout << "P" << i;
+							for (int j = 0; j < m; j++)
+							{
+								//cout<<need[i][j]<<" " ;
+
+								cout << "  " << need[i][j];
+							}
+							cout << endl;
+						}
+					}
+
+				}
+
+				/*for (int i = 0;i < m;i++)
+				{
+					if (req[i] <= need[p][i])
+					{
+						if (req[i] <= avail[i])
+						{
+							avail[i] -= req[i];
+							alloc[p][i] += req[i];
+							need[p][i] -= req[i];
+						}
+					}
+
+				}*/
+				if (pass == 0)
+				{
+					cout << "Cann't be granted"<<endl;
+				}
+				else
+				{
+					safe2(alloc, max, avail, need, p);
+				}
+			}
+
+		}
+		return 0;
+	}
+	
+
+
